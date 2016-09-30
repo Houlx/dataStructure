@@ -1,0 +1,15 @@
+目标：回顾C++语言，熟练掌握函数参数传递、函数调用，理解部分基础算法的逻辑。
+
+内容：
+1. 编写一个函数 bool FindValue（int* A, int n, int x)，实现在数组A中查找x的操作；并编写main进行调用测试。
+
+2. 编写一个函数 void BubbleSort(int* A, int n),实现对n个数据的冒泡排序；并编写main进行调用测试。
+
+3. 编写一个函数 int Count(int* A, int n),实现统计n个数据中的不重复的数据个数；并编写main进行调用测试。
+
+4. 编写一个函数 void Merge(int* A, int m1,int*B,int m2,int * C),实现将有序数组A(m1个元素）与有序数组B(m2个元素）合并成有序序列并存储到数组C中；并编写main进行调用测试。
+
+5. 编写一个函数 double compute(double a, double b, char opt),实现a与b的算术运算（运算类型由opt指定）；并编写main进行调用测试。
+
+
+  8:00开始检查（完成的题目数、质量)。
