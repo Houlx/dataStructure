@@ -1,22 +1,7 @@
+#include "arrayStack.h"
+
 #include <iostream>
 using namespace std;
-
-class ArrayStack{
-private:
-	int maxSize;
-	int top;
-	int* st;
-public:
-	ArrayStack(int size);
-	ArrayStack();
-	~ArrayStack();
-	bool isFull();
-	bool isEmpty();
-	void clear();
-	bool push(const int item);
-	bool pop(int& item);
-	bool Top(int& item);
-};
 
 ArrayStack::ArrayStack(int size){
 	maxSize=size;
@@ -83,7 +68,6 @@ bool ArrayStack::Top(int& item){
 		return true;
 	}
 }
-
 
 
 int main(int argc, char const *argv[])
