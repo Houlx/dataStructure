@@ -3,12 +3,12 @@
 #include <cstring>
 #include <string>
 using namespace std;
-//数制转换
+//回文游戏
 class Stack {
 private:
 	int maxSize;
 	int topItem;
-	int* st;
+	char* st;
 public:
 	Stack(int size);
 	Stack();
@@ -16,15 +16,15 @@ public:
 	bool isFull();
 	bool isEmpty();
 	void clear();
-	bool push(const int item);
-	bool pop(int& item);
-	bool top(int& item);
+	bool push(const char item);
+	bool pop(char& item);
+	bool top(char& item);
 };
 
 Stack::Stack(int size){
 	maxSize=size;
 	topItem=-1;
-	st=new int[maxSize];
+	st=new char[maxSize];
 }
 
 Stack::Stack(){
@@ -59,7 +59,7 @@ void Stack::clear(){
 	topItem=-1;
 }
 
-bool Stack::push(const int item){
+bool Stack::push(const char item){
 	if (isFull())
 	{
 		/* code */
@@ -70,7 +70,7 @@ bool Stack::push(const int item){
 	}
 }
 
-bool Stack::pop(int& item){
+bool Stack::pop(char& item){
 	if (isEmpty())
 	{
 		/* code */
@@ -81,7 +81,7 @@ bool Stack::pop(int& item){
 	}
 }
 
-bool Stack::top(int& item){
+bool Stack::top(char& item){
 	if (isEmpty())
 	{
 		/* code */
@@ -93,53 +93,31 @@ bool Stack::top(int& item){
 	}
 }
 
-void convert(int n,int operand){
+bool isPalindrome(char* str){
 	Stack *temp=new Stack(100);
-	while(operand){
-		int a=operand%n;
-		operand=operand/n;
-		temp->push(a);
+	char c=NULL;
+	for (int i = 0; str[i]!='\0'; ++i)
+	{
+		/* code */
+		temp->push(str[i]);
 	}
-	int b=0;
 
-		if (n==16)
+	for (int i = 0; str[i]!='\0'; ++i)
+	{
+		/* code */
+		temp->pop(c);
+		if (str[i]!=c)
 		{
 			/* code */
-			cout<<"0x";
-			while(temp->pop(b)){
-				switch(b){
-				case 10:cout<<"A";break;
-				case 11:cout<<"B";break;
-				case 12:cout<<"C";break;
-				case 13:cout<<"D";break;
-				case 14:cout<<"E";break;
-				case 15:cout<<"F";break;
-				default:cout<<b;break;
-				}
-			}
+			return false;
 		}
-
-		if (n==8)
-		{
-			/* code */
-			cout<<"0";
-			while(temp->pop(b)){
-				cout<<b;
-			}
-		}
-
-		if (n==2)
-		{
-			/* code */
-			while(temp->pop(b)){
-				cout<<b;
-			}
-		}
-	cout<<endl;
+	}
+	return true;
 }
-int main(int argc, char const *argv[]){
-	convert(2,1023);
-	convert(8,789);
-	convert(16,15213);
+
+int main(int argc, char const *argv[])
+{
+	char* str="123321";
+	cout<<isPalindrome(str)<<endl;
 	return 0;
 }
