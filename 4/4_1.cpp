@@ -135,19 +135,22 @@ double calculate(char* str){
 	Stack<char> *OPTR=new Stack<char>(100);
 	char* p=str;
 	double operand1=0,operand2=0;
-	// double operand=0;
+	double operand=0;
 	char temp=NULL;
 
 	OPTR->push('#');
 
 	while(*p){
-		if ((*p)>='0'&&(*p)<='9')
+		while ((*p)>='0'&&(*p)<='9')
 		{
-			// operand=operand*10+double(*p)-48;
-			OPRD->push((*p)-48);
+			operand=operand*10+double(*p)-48;
 			p++;
 		}
-		else if (outsidePriority(*p)!=-1){
+		if (operand != 0) {
+			OPRD->push(operand);
+			operand = 0;
+		}
+		if (outsidePriority(*p)!=-1){
 			{
 				if (outsidePriority(*p)>insidePriority(OPTR->top()))
 				{
@@ -174,7 +177,7 @@ double calculate(char* str){
 
 int main(int argc, char const *argv[])
 {
-	cout<<calculate("3*(7-2)#")<<endl;
+	cout<<calculate("32*(72/23)#")<<endl;
 	return 0;
 }
 
