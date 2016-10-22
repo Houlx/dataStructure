@@ -1,31 +1,35 @@
 #include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <string>
 using namespace std;
 
 template<class T>
-class Queue{
+class RoundRobinQueue {
 private:
 	int maxSize;
 	int front;
 	int rear;
 	T* queue;
 
+	int tag;
 public:
-	Queue(int size){
+	RoundRobinQueue(int size){
+		front=0;
+		rear=0;
+		tag=0;
 		maxSize=size;
 		queue=new T[maxSize];
-		front=rear=0;
 	}
 
-	~Queue(){
-		delete[] queue;
-	}
-
-	bool isEmpty(){
-		if (front==rear)
+	int empty(){
+		if (rear==front)
 		{
-			return true;
+			tag=0;
+		}else{
+			return 1;
 		}
-		return false;
+		return tag;
 	}
 
 	bool isFull(){
@@ -34,10 +38,6 @@ public:
 			return true;
 		}
 		return false;
-	}
-
-	void clear(){
-		front=rear;
 	}
 
 	bool enQueue(const T item){
@@ -51,7 +51,7 @@ public:
 	}
 
 	bool deQueue(T& item){
-		if (isEmpty())
+		if (!empty())
 		{
 			return false;
 		}
@@ -61,7 +61,7 @@ public:
 	}
 
 	bool getFront(T& item){
-		if (isEmpty())
+		if (!empty())
 		{
 			return false;
 		}
@@ -69,3 +69,8 @@ public:
 		return true;
 	}
 };
+
+int main(int argc, char const *argv[]){
+	
+	return 0;
+}
