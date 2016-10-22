@@ -71,13 +71,13 @@ public:
 
 	void printQueue(){
 		int p = front;
-
-		while(p!=rear){
-			cout<<queue[p]<<endl;
-			p++;
+		if(!isEmpty()){
+			while(p!=rear){
+				cout<<queue[p]<<endl;
+				p++;
+			}
 		}
-
-		//cout<<queue[rear]<<endl;
+	//cout<<queue[rear]<<endl;
 	}
 };
 
