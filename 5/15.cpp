@@ -8,32 +8,33 @@ template<class T>
 class RoundRobinQueue {
 private:
 	int maxSize;
+
 	int front;
 	int rear;
 	T* queue;
 
 	int tag;
+	int flag;
 public:
 	RoundRobinQueue(int size){
 		front=0;
 		rear=0;
 		tag=0;
+		flag=0;
 		maxSize=size;
 		queue=new T[maxSize];
 	}
 
 	int empty(){
-		if (rear==front)
+		if (tag==0)
 		{
-			tag=0;
-		}else{
-			return 1;
+			return true;
 		}
-		return tag;
+		return false;
 	}
 
 	bool isFull(){
-		if ((rear+1)%maxSize==front)
+		if (front==rear&&tag!=0)
 		{
 			return true;
 		}
@@ -47,6 +48,8 @@ public:
 		}
 		queue[rear]=item;
 		rear=(rear+1)%maxSize;
+		flag++;
+		tag=1;
 		return true;
 	}
 
@@ -57,6 +60,11 @@ public:
 		}
 		item=queue[front];
 		front=(front+1)%maxSize;
+		flag--;
+		if (flag==0)
+		{
+			tag=0;
+		}
 		return true;
 	}
 
