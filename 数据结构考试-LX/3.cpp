@@ -28,7 +28,7 @@ void move(int a[], int n) {
 }
 int main(int argc, char const * argv[])
 {
-	int arr[10] = {5, 2, 3, 7, 8, 9, 1, 2, 0, 3};
+	int arr[10] = {5,1,2,3,4,6,7,8,9,0};
 	move(arr, 10);
 	for (int i = 0; i < 10; ++i)
 	{

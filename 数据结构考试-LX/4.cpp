@@ -5,12 +5,12 @@ int min(int a[], int start, int end)
 {
 	if (start == end)
 		return a[start];
-	int v = min(a,start + 1, end);
-	return a[start]<v?a[start]:v;
+	int v = min(a, start + 1, end);
+	return a[start] < v ? a[start] : v;
 }
 int main(int argc, char const *argv[])
 {
-	int arr[10]={2,4,5,2,-1,6,4,7,4,5};
-	cout<<min(arr,0,9);
+	int arr[10] = {2, 4, 5, 2, 0, 6, 4, 7, 4, 5};
+	cout << min(arr, 0, 9);
 	return 0;
 }

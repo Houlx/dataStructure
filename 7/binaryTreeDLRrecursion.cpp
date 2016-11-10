@@ -91,8 +91,37 @@ public:
 		}
 		return NULL;
 	}
-	void breadthFirstOrder(BinaryTreeNode<T>* root);
-	void preOrder(BinaryTreeNode<T>* root);
+	void breadthFirstOrder(BinaryTreeNode<T>* root){
+		using std::queue;
+		queue<BinaryTreeNode<T>*> nodeQueue;
+		BinaryTreeNode<T>* pointer=root;
+
+		if (pointer)
+		{
+			nodeQueue.push(pointer);
+		}
+		while(!nodeQueue.empty()){
+			pointer=nodeQueue.front();
+			cout<<pointer->element;
+			nodeQueue.pop();
+			if (pointer->LChild)
+			{
+				nodeQueue.push(pointer->LChild);
+			}
+			if (pointer->RChild)
+			{
+				nodeQueue.push(pointer->RChild);
+			}
+		}
+	}
+	void preOrder(BinaryTreeNode<T>* root){
+		if (root!=NULL)
+		{
+			cout<<root->element;
+			preOrder(root->LChild);
+			preOrder(root->RChild);
+		}
+	}
 
 	// void inOrder(BinaryTreeNode<T>* root);
 	// void postOrder(BinaryTreeNode<T>* root);
@@ -102,6 +131,7 @@ public:
 
 int main(int argc, char const *argv[])
 {
+	BinaryTree tree;
 	
 	return 0;
 }
