@@ -123,9 +123,91 @@ public:
 		}
 	}
 
-	// void inOrder(BinaryTreeNode<T>* root);
-	// void postOrder(BinaryTreeNode<T>* root);
-	// void levelOrder(BinaryTreeNode<T>* root);
+	void inOrder(BinaryTreeNode<T>* root){
+		if (root!=NULL)
+		{
+			inOrder(root->LChild);
+			cout<<root->element;
+			inOrder(root->RChild);
+		}
+	}
+
+
+	void postOrder(BinaryTreeNode<T>* root){
+		if (root!=NULL)
+		{
+			postOrder(root->LChild);
+			postOrder(root->RChild);
+			cout<<root->element;
+		}
+	}
+
+	void preOrderWithoutRecusion(BinaryTreeNode<T>* root){
+		using std::stack;
+
+		stack<BinaryTreeNode<T>*> nodeStack;
+		BinaryTreeNode<T>* pointer=root;
+
+		while(!nodeStack.empty()||pointer){
+			if (pointer)
+			{
+				cout<<pointer->element;
+				if (pointer->LChild!=NULL)
+				{
+					nodeStack.push(pointer->RChild);
+				}
+				pointer=pointer->LChild;
+			}else{
+				pointer=nodeStack.top();
+				nodeStack.pop();
+			}
+		}
+	}
+
+	void inOrderWithoutRecusion(BinaryTreeNode<T>* root){
+		using std::stack;
+
+		stack<BinaryTreeNode<T>*> nodeStack;
+		BinaryTreeNode<T>* pointer=root;
+
+		while(!nodeStack.empty()||pointer){
+			if (pointer)
+			{
+				nodeStack.push(pointer);
+				pointer=pointer->LChild;
+			}else{
+				pointer=nodeStack.top();
+				cout<<pointer->element;
+				pointer=pointer->RChild;
+				nodeStack.pop();
+			}
+		}
+	}
+
+	void postOrderWithoutRecusion(BinaryTreeNode<T>* root){
+		using std::stack;
+		stack<BinaryTreeNode<T>*> nodeStack;
+		BinaryTreeNode<T>* pointer=root;
+		BinaryTreeNode<T>* pre=root;
+
+		while(pointer){
+			for(;pointer->LChild!=NULL;pointer=pointer->LChild){
+				nodeStack.push(pointer);
+			}
+			while(pointer!=NULL&&(pointer->RChild==NULL||pointer->RChild==pre)){
+				cout<<pointer->element;
+				pre=pointer;
+				if (nodeStack.empty())
+				{
+					return;
+				}
+				pointer=nodeStack.top();
+				nodeStack.pop();
+			}
+			nodeStack.push(pointer);
+			pointer=pointer->RChild;
+		}
+	}
 	// void deleteBinaryTree(BinaryTreeNode<T>* root);
 };
 
