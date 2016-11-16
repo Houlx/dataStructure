@@ -1,49 +1,53 @@
+#include <iostream>
+#include <stack>
+#include <queue>
+using namespace std;
 template <class T>
-class BinaryTreeNode{
+class BinaryTreeNode {
 public:
 	T element;
 	BinaryTreeNode<T> *LChild;
 	BinaryTreeNode<T> *RChild;
 	BinaryTreeNode<T> *parent;
 
-	BinaryTreeNode(){
-		element=0;
-		LChild=NULL;
-		RChild=NULL;
-		parent=NULL;
+	BinaryTreeNode() {
+		element = 0;
+		LChild = NULL;
+		RChild = NULL;
+		parent = NULL;
 	}
-	BinaryTreeNode(const T& ele){
-		element=ele;
-		LChild=NULL;
-		RChild=NULL;
-		parent=NULL;
+	BinaryTreeNode(const T& ele) {
+		element = ele;
+		LChild = NULL;
+		RChild = NULL;
+		parent = NULL;
 	}
-	BinaryTreeNode(const T& ele, BinaryTreeNode<T>* l,BinaryTreeNode<T>* r,BinaryTreeNode<T>* p){
-		element=ele;
-		LChild=l;
-		RChild=r;
-		parent=p;
+	BinaryTreeNode(const T& ele, BinaryTreeNode<T>* l, BinaryTreeNode<T>* r, BinaryTreeNode<T>* p) {
+		element = ele;
+		LChild = l;
+		RChild = r;
+		parent = p;
 	}
-	BinaryTreeNode<T>* getLeftChild() const{
+	BinaryTreeNode<T>* getLeftChild() const {
 		return this->LChild;
 	}
-	BinaryTreeNode<T>* getRightChild() const{
+	BinaryTreeNode<T>* getRightChild() const {
 		return this->RChild;
 	}
-	void setLeftChild(BinaryTreeNode<T>* l){
-		this->LChild=l;
+	void setLeftChild(BinaryTreeNode<T>* l) {
+		this->LChild = l;
 	}
-	void setRightChild(BinaryTreeNode<T>* r){
-		this->RChild=r;
+	void setRightChild(BinaryTreeNode<T>* r) {
+		this->RChild = r;
 	}
-	T getValue() const{
+	T getValue() const {
 		return this->element;
 	}
-	void setValue(const T& val){
-		this->element=val;
+	void setValue(const T& val) {
+		this->element = val;
 	}
-	bool isLeaf() const{
-		if (this->LChild==NULL&&this->RChild==NULL)
+	bool isLeaf() const {
+		if (this->LChild == NULL&&this->RChild == NULL)
 		{
 			return true;
 		}
@@ -52,57 +56,59 @@ public:
 };
 
 template <class T>
-class BinaryTree{
+class BinaryTree {
 private:
 	BinaryTreeNode<T> *root;
 public:
-	BinaryTree(){
-		root=NULL;
+	BinaryTree() {
+		root = NULL;
 	}
-	~BinaryTree();
-	bool isEmpty() const{
-		if (root==NULL)
+	BinaryTree(BinaryTreeNode<T>* root) {
+		this->root = root;
+	}
+	bool isEmpty() const {
+		if (root == NULL)
 		{
 			return true;
 		}
 		return false;
 	}
-	BinaryTreeNode<T>* getRoot() const{
+	BinaryTreeNode<T>* getRoot() const {
 		return root;
 	}
-	BinaryTreeNode<T>* getParent(BinaryTreeNode<T>* current) const{
+	BinaryTreeNode<T>* getParent(BinaryTreeNode<T>* current) const {
 		if (current->parent)
 		{
 			return current->parent;
 		}
 		return NULL;
 	}
-	BinaryTreeNode<T>* getLeftSibling(BinaryTreeNode<T>* current) const{
+	BinaryTreeNode<T>* getLeftSibling(BinaryTreeNode<T>* current) const {
 		if (current->parent&&current->parent->LChild)
 		{
 			return current->parent->LChild;
 		}
 		return NULL;
 	}
-	BinaryTreeNode<T>* getRightSibling(BinaryTreeNode<T>* current) const{
+	BinaryTreeNode<T>* getRightSibling(BinaryTreeNode<T>* current) const {
 		if (current->parent&&current->parent->RChild)
 		{
 			return current->parent->RChild;
 		}
 		return NULL;
 	}
-	void breadthFirstOrder(BinaryTreeNode<T>* root){
-		using std::queue;
+	void breadthFirstOrder(BinaryTreeNode<T>* root) {
+		// using std::queue;
 		queue<BinaryTreeNode<T>*> nodeQueue;
-		BinaryTreeNode<T>* pointer=root;
+		BinaryTreeNode<T>* pointer = root;
 
 		if (pointer)
 		{
 			nodeQueue.push(pointer);
 		}
-		while(!nodeQueue.empty()){
-			pointer=nodeQueue.front();
-			cout<<pointer->element;
+		while (!nodeQueue.empty()) {
+			pointer = nodeQueue.front();
+			cout << pointer->element;
 			nodeQueue.pop();
 			if (pointer->LChild)
 			{
@@ -114,98 +120,100 @@ public:
 			}
 		}
 	}
-	void preOrder(BinaryTreeNode<T>* root){
-		if (root!=NULL)
+	void preOrder(BinaryTreeNode<T>* root) {
+		if (root != NULL)
 		{
-			cout<<root->element;
+			cout << root->element;
 			preOrder(root->LChild);
 			preOrder(root->RChild);
 		}
 	}
 
-	void inOrder(BinaryTreeNode<T>* root){
-		if (root!=NULL)
+	void inOrder(BinaryTreeNode<T>* root) {
+		if (root != NULL)
 		{
 			inOrder(root->LChild);
-			cout<<root->element;
+			cout << root->element;
 			inOrder(root->RChild);
 		}
 	}
 
 
-	void postOrder(BinaryTreeNode<T>* root){
-		if (root!=NULL)
+	void postOrder(BinaryTreeNode<T>* root) {
+		if (root != NULL)
 		{
 			postOrder(root->LChild);
 			postOrder(root->RChild);
-			cout<<root->element;
+			cout << root->element;
 		}
 	}
 
-	void preOrderWithoutRecusion(BinaryTreeNode<T>* root){
-		using std::stack;
+	void preOrderWithoutRecusion(BinaryTreeNode<T>* root) {
+		// using std::stack;
 
 		stack<BinaryTreeNode<T>*> nodeStack;
-		BinaryTreeNode<T>* pointer=root;
+		BinaryTreeNode<T>* pointer = root;
 
-		while(!nodeStack.empty()||pointer){
+		while (!nodeStack.empty() || pointer) {
 			if (pointer)
 			{
-				cout<<pointer->element;
-				if (pointer->LChild!=NULL)
+				cout << pointer->element;
+				if (pointer->LChild != NULL)
 				{
 					nodeStack.push(pointer->RChild);
 				}
-				pointer=pointer->LChild;
-			}else{
-				pointer=nodeStack.top();
+				pointer = pointer->LChild;
+			}
+			else {
+				pointer = nodeStack.top();
 				nodeStack.pop();
 			}
 		}
 	}
 
-	void inOrderWithoutRecusion(BinaryTreeNode<T>* root){
-		using std::stack;
+	void inOrderWithoutRecusion(BinaryTreeNode<T>* root) {
+		// using std::stack;
 
 		stack<BinaryTreeNode<T>*> nodeStack;
-		BinaryTreeNode<T>* pointer=root;
+		BinaryTreeNode<T>* pointer = root;
 
-		while(!nodeStack.empty()||pointer){
+		while (!nodeStack.empty() || pointer) {
 			if (pointer)
 			{
 				nodeStack.push(pointer);
-				pointer=pointer->LChild;
-			}else{
-				pointer=nodeStack.top();
-				cout<<pointer->element;
-				pointer=pointer->RChild;
+				pointer = pointer->LChild;
+			}
+			else {
+				pointer = nodeStack.top();
+				cout << pointer->element;
+				pointer = pointer->RChild;
 				nodeStack.pop();
 			}
 		}
 	}
 
-	void postOrderWithoutRecusion(BinaryTreeNode<T>* root){
-		using std::stack;
+	void postOrderWithoutRecusion(BinaryTreeNode<T>* root) {
+		// using std::stack;
 		stack<BinaryTreeNode<T>*> nodeStack;
-		BinaryTreeNode<T>* pointer=root;
-		BinaryTreeNode<T>* pre=root;
+		BinaryTreeNode<T>* pointer = root;
+		BinaryTreeNode<T>* pre = root;
 
-		while(pointer){
-			for(;pointer->LChild!=NULL;pointer=pointer->LChild){
+		while (pointer) {
+			for (;pointer->LChild != NULL;pointer = pointer->LChild) {
 				nodeStack.push(pointer);
 			}
-			while(pointer!=NULL&&(pointer->RChild==NULL||pointer->RChild==pre)){
-				cout<<pointer->element;
-				pre=pointer;
+			while (pointer != NULL && (pointer->RChild == NULL || pointer->RChild == pre)) {
+				cout << pointer->element;
+				pre = pointer;
 				if (nodeStack.empty())
 				{
 					return;
 				}
-				pointer=nodeStack.top();
+				pointer = nodeStack.top();
 				nodeStack.pop();
 			}
 			nodeStack.push(pointer);
-			pointer=pointer->RChild;
+			pointer = pointer->RChild;
 		}
 	}
 	// void deleteBinaryTree(BinaryTreeNode<T>* root);
@@ -213,7 +221,22 @@ public:
 
 int main(int argc, char const *argv[])
 {
-	BinaryTree tree;
-	
+	BinaryTreeNode<int>* root = new BinaryTreeNode<int>(1);
+	BinaryTree<int> tree(root);
+
+	root->LChild = new BinaryTreeNode<int>(2);
+	root->RChild = new BinaryTreeNode<int>(3);
+	tree.preOrder(root);
+	cout << endl;
+	tree.inOrder(root);
+	cout << endl;
+	tree.postOrder(root);
+	cout << endl;
+
+	tree.preOrderWithoutRecusion(root);
+	cout << endl;
+	tree.inOrderWithoutRecusion(root);
+	cout << endl;
+	tree.postOrderWithoutRecusion(root);
 	return 0;
 }
