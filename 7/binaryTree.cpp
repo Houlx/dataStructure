@@ -47,7 +47,7 @@ public:
 		this->element = val;
 	}
 	bool isLeaf() const {
-		if (this->LChild == NULL&&this->RChild == NULL)
+		if (this->LChild == NULL && this->RChild == NULL)
 		{
 			return true;
 		}
@@ -84,19 +84,20 @@ public:
 		return NULL;
 	}
 	BinaryTreeNode<T>* getLeftSibling(BinaryTreeNode<T>* current) const {
-		if (current->parent&&current->parent->LChild)
+		if (current->parent && current->parent->LChild)
 		{
 			return current->parent->LChild;
 		}
 		return NULL;
 	}
 	BinaryTreeNode<T>* getRightSibling(BinaryTreeNode<T>* current) const {
-		if (current->parent&&current->parent->RChild)
+		if (current->parent && current->parent->RChild)
 		{
 			return current->parent->RChild;
 		}
 		return NULL;
 	}
+
 	void breadthFirstOrder(BinaryTreeNode<T>* root) {
 		// using std::queue;
 		queue<BinaryTreeNode<T>*> nodeQueue;
@@ -158,7 +159,7 @@ public:
 			if (pointer)
 			{
 				cout << pointer->element;
-				if (pointer->LChild != NULL)
+				if (pointer->RChild != NULL)
 				{
 					nodeStack.push(pointer->RChild);
 				}
@@ -199,7 +200,7 @@ public:
 		BinaryTreeNode<T>* pre = root;
 
 		while (pointer) {
-			for (;pointer->LChild != NULL;pointer = pointer->LChild) {
+			for (; pointer->LChild != NULL; pointer = pointer->LChild) {
 				nodeStack.push(pointer);
 			}
 			while (pointer != NULL && (pointer->RChild == NULL || pointer->RChild == pre)) {
@@ -226,6 +227,14 @@ int main(int argc, char const *argv[])
 
 	root->LChild = new BinaryTreeNode<int>(2);
 	root->RChild = new BinaryTreeNode<int>(3);
+	root->LChild->LChild = new BinaryTreeNode<int>(4);
+	root->LChild->RChild = new BinaryTreeNode<int>(5);
+	root->RChild->LChild = new BinaryTreeNode<int>(6);
+	root->RChild->RChild = new BinaryTreeNode<int>(7);
+
+	tree.breadthFirstOrder(root);
+	cout << endl;
+
 	tree.preOrder(root);
 	cout << endl;
 	tree.inOrder(root);
