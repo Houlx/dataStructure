@@ -218,37 +218,56 @@ public:
 		}
 	}
 	// void deleteBinaryTree(BinaryTreeNode<T>* root);
+
+
 };
 
+enum createTreeMethod {
+	PRE_IN,
+	POST_IN
+};
+template <class T>
+void createTree(createTreeMethod method, BinaryTreeNode<T>** root, T arr1[], int i, int j, T arr2[], int k, int h) {
+	switch (method) {
+	case PRE_IN:
+		(*root) = new BinaryTreeNode<T>();
+		(*root)->element = arr1[i];
+
+		int m = k;
+		while (arr1[i] != arr2[m]) {
+			m++;
+		}
+		if (m == k)
+		{
+			(*root)->LChild = NULL;
+		}
+		else {
+			createTree(PRE_IN, &(*root)->LChild, arr1, i + 1, i + m - k, arr2, k, m - 1);
+		}
+		if (m == h) {
+			(*root)->RChild = NULL;
+		}
+		else {
+			createTree(PRE_IN, &(*root)->RChild, arr1, i + m - k + 1, j, arr2, m + 1, h);
+		}
+		break;
+
+	}
+}
+
+// void createTree
 int main(int argc, char const *argv[])
 {
-	BinaryTreeNode<int>* root = new BinaryTreeNode<int>(1);
+	BinaryTreeNode<int>* root = NULL;
+
+	int pre[] = { 1, 2, 4, 5, 3, 6, 7 };
+	int in[] = { 4, 2, 5, 1, 6, 3, 7 };
+	int post[] = {4, 5, 2, 6, 7, 3, 1};
+
+	createTree(PRE_IN, &root, pre, 0, 6, in, 0, 6);
+
 	BinaryTree<int> tree(root);
-
-	root->LChild = new BinaryTreeNode<int>(2);
-	root->RChild = new BinaryTreeNode<int>(3);
-	root->LChild->LChild = new BinaryTreeNode<int>(4);
-	root->LChild->RChild = new BinaryTreeNode<int>(5);
-	root->RChild->LChild = new BinaryTreeNode<int>(6);
-	root->RChild->RChild = new BinaryTreeNode<int>(7);
-
-	// tree.breadthFirstOrder(root);
-	// cout << endl;
-
-	//先序
 	tree.preOrder(root);
 	cout << endl;
-	//中序
 	tree.inOrder(root);
-	cout << endl;
-	//后序
-	tree.postOrder(root);
-	cout << endl;
-
-	// tree.preOrderWithoutRecusion(root);
-	// cout << endl;
-	// tree.inOrderWithoutRecusion(root);
-	// cout << endl;
-	// tree.postOrderWithoutRecusion(root);
-	return 0;
 }
