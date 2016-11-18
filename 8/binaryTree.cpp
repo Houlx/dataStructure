@@ -228,12 +228,14 @@ enum createTreeMethod {
 };
 template <class T>
 void createTree(createTreeMethod method, BinaryTreeNode<T>** root, T arr1[], int i, int j, T arr2[], int k, int h) {
+	int m, n;
 	switch (method) {
+		//先序，中序 构造二叉树
 	case PRE_IN:
 		(*root) = new BinaryTreeNode<T>();
 		(*root)->element = arr1[i];
 
-		int m = k;
+		m = k;
 		while (arr1[i] != arr2[m]) {
 			m++;
 		}
@@ -251,7 +253,30 @@ void createTree(createTreeMethod method, BinaryTreeNode<T>** root, T arr1[], int
 			createTree(PRE_IN, &(*root)->RChild, arr1, i + m - k + 1, j, arr2, m + 1, h);
 		}
 		break;
+		//后序，中序 构造二叉树
+	case POST_IN:
+		(*root) = new BinaryTreeNode<T>();
+		(*root)->element = arr2[h];
 
+		n = i;
+		while (arr2[h] != arr1[n]) {
+			n++;
+		}
+		if (n == i)
+		{
+			(*root)->LChild = NULL;
+		}
+		else {
+			createTree(POST_IN, &(*root)->LChild, arr1, i, n - 1, arr2, k, k + n - i - 1);
+		}
+		if (n == j) {
+			(*root)->RChild = NULL;
+		}
+		else {
+			createTree(POST_IN, &(*root)->RChild, arr1, n + 1, j, arr2, k + n - i, h - 1);
+		}
+
+		break;
 	}
 }
 
@@ -262,9 +287,10 @@ int main(int argc, char const *argv[])
 
 	int pre[] = { 1, 2, 4, 5, 3, 6, 7 };
 	int in[] = { 4, 2, 5, 1, 6, 3, 7 };
-	int post[] = {4, 5, 2, 6, 7, 3, 1};
+	int post[] = { 4, 5, 2, 6, 7, 3, 1 };
 
-	createTree(PRE_IN, &root, pre, 0, 6, in, 0, 6);
+	//createTree(PRE_IN, &root, pre, 0, 6, in, 0, 6);
+	createTree(POST_IN, &root, in, 0, 6, post, 0, 6);
 
 	BinaryTree<int> tree(root);
 	tree.preOrder(root);
