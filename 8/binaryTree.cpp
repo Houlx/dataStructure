@@ -173,7 +173,6 @@ public:
 	}
 
 	void inOrderWithoutRecusion(BinaryTreeNode<T>* root) {
-		// using std::stack;
 
 		stack<BinaryTreeNode<T>*> nodeStack;
 		BinaryTreeNode<T>* pointer = root;
@@ -230,7 +229,7 @@ template <class T>
 void createTree(createTreeMethod method, BinaryTreeNode<T>** root, T arr1[], int i, int j, T arr2[], int k, int h) {
 	int m, n;
 	switch (method) {
-		//先序，中序 构造二叉树
+	//先序，中序 构造二叉树
 	case PRE_IN:
 		(*root) = new BinaryTreeNode<T>();
 		(*root)->element = arr1[i];
@@ -253,7 +252,7 @@ void createTree(createTreeMethod method, BinaryTreeNode<T>** root, T arr1[], int
 			createTree(PRE_IN, &(*root)->RChild, arr1, i + m - k + 1, j, arr2, m + 1, h);
 		}
 		break;
-		//后序，中序 构造二叉树
+	//后序，中序 构造二叉树
 	case POST_IN:
 		(*root) = new BinaryTreeNode<T>();
 		(*root)->element = arr2[h];
@@ -290,10 +289,12 @@ int main(int argc, char const *argv[])
 	int post[] = { 4, 5, 2, 6, 7, 3, 1 };
 
 	//createTree(PRE_IN, &root, pre, 0, 6, in, 0, 6);
-	createTree(POST_IN, &root, in, 0, 6, post, 0, 6);
+	//createTree(POST_IN, &root, in, 0, 6, post, 0, 6);
+
+	int pre1[] = {1, 2, 5, 3, 4, 6, 7, 8, 9, 10};
+	int in1[] = {5, 2, 3, 4, 1, 6, 8, 9, 7, 10};
+	createTree(PRE_IN, &root, pre1, 0, 9, in1, 0, 9);
 
 	BinaryTree<int> tree(root);
-	tree.preOrder(root);
-	cout << endl;
-	tree.inOrder(root);
+	tree.postOrder(root);
 }
