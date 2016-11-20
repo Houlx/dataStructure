@@ -41,7 +41,7 @@ public:
 		this->RChild = r;
 	}
 	T getValue() const {
-		return this->element;
+		return element;
 	}
 	void setValue(const T& val) {
 		this->element = val;
@@ -124,7 +124,7 @@ public:
 	void preOrder(BinaryTreeNode<T>* root) {
 		if (root != NULL)
 		{
-			cout << root->element;
+			cout << root->element << endl;
 			preOrder(root->LChild);
 			preOrder(root->RChild);
 		}
@@ -134,7 +134,7 @@ public:
 		if (root != NULL)
 		{
 			inOrder(root->LChild);
-			cout << root->element;
+			cout << root->element << endl;
 			inOrder(root->RChild);
 		}
 	}
@@ -145,7 +145,7 @@ public:
 		{
 			postOrder(root->LChild);
 			postOrder(root->RChild);
-			cout << root->element;
+			cout << root->element << endl;
 		}
 	}
 
@@ -158,7 +158,7 @@ public:
 		while (!nodeStack.empty() || pointer) {
 			if (pointer)
 			{
-				cout << pointer->element;
+				cout << pointer->element << endl;
 				if (pointer->RChild != NULL)
 				{
 					nodeStack.push(pointer->RChild);
@@ -185,7 +185,7 @@ public:
 			}
 			else {
 				pointer = nodeStack.top();
-				cout << pointer->element;
+				cout << pointer->element << endl;
 				pointer = pointer->RChild;
 				nodeStack.pop();
 			}
@@ -203,7 +203,7 @@ public:
 				nodeStack.push(pointer);
 			}
 			while (pointer != NULL && (pointer->RChild == NULL || pointer->RChild == pre)) {
-				cout << pointer->element;
+				cout << pointer->element << endl;
 				pre = pointer;
 				if (nodeStack.empty())
 				{
@@ -219,17 +219,86 @@ public:
 	// void deleteBinaryTree(BinaryTreeNode<T>* root);
 
 
+	
 };
+//二叉搜索树 查找
+template <class T>
+BinaryTreeNode<T>* search(BinaryTreeNode<T>* root, T key) {
+	bool find = false;
+	BinaryTreeNode<T>* temp = root;
+	while (temp!=NULL && !find) {
+		if (key == temp->element) {
+			find = true;
+			return temp;
+		}
+		else if (key < temp->element) {
+			temp = temp->LChild;
+		}
+		else {
+			temp = temp->RChild;
+		}
+	}
+	return NULL;
+}
 
+//insert Node
+template <class T>
+void insertNode(BinaryTreeNode<T>** root, const T& value) {
+	BinaryTreeNode<T>* p = new BinaryTreeNode<T>(value);
+	if ((*root) == NULL) {
+		(*root) = p;
+	}
+	else if (value<(*root)->getValue()) {
+		insertNode(&((*root)->LChild), value);
+	}
+	else {
+		insertNode(&((*root)->RChild), value);
+	}
+}
+
+//二叉搜索树 复制删除
+template <class T>
+void deleteByCopying(BinaryTreeNode<T>* root, const T& value) {
+	BinaryTreeNode<T> *node = search(root, value);
+	BinaryTreeNode<T> *tmp = node;
+	BinaryTreeNode<T> *previous = node;
+	if (node) {
+		if (!node->RChild)
+		{
+			node = node->LChild;
+		}
+		else if (!node->LChild)
+		{
+			node = node->RChild;
+		}
+		else {
+			tmp = node->LChild;
+			previous = node;
+			while (tmp->RChild) {
+				previous = tmp;
+				tmp = tmp->RChild;
+			}
+			node->element = tmp->element;
+			if (previous == node)
+			{
+				previous->LChild = tmp->LChild;
+			}
+			else {
+				previous->RChild = tmp->LChild;
+			}
+		}
+	}
+}
 enum createTreeMethod {
 	PRE_IN,
 	POST_IN
 };
+
 template <class T>
 void createTree(createTreeMethod method, BinaryTreeNode<T>** root, T arr1[], int i, int j, T arr2[], int k, int h) {
 	int m, n;
 	switch (method) {
-	//先序，中序 构造二叉树
+		//先序，中序 构造二叉树
 	case PRE_IN:
 		(*root) = new BinaryTreeNode<T>();
 		(*root)->element = arr1[i];
@@ -252,7 +321,7 @@ void createTree(createTreeMethod method, BinaryTreeNode<T>** root, T arr1[], int
 			createTree(PRE_IN, &(*root)->RChild, arr1, i + m - k + 1, j, arr2, m + 1, h);
 		}
 		break;
-	//后序，中序 构造二叉树
+		//后序，中序 构造二叉树
 	case POST_IN:
 		(*root) = new BinaryTreeNode<T>();
 		(*root)->element = arr2[h];
@@ -282,19 +351,56 @@ void createTree(createTreeMethod method, BinaryTreeNode<T>** root, T arr1[], int
 // void createTree
 int main(int argc, char const *argv[])
 {
-	BinaryTreeNode<int>* root = NULL;
+	//test Function.
+	BinaryTreeNode<int>* root0 = NULL;
+	BinaryTreeNode<int>* root1 = NULL;
+	int pre[] = { 100,80,60,90,120,140 };
+	int in[] = { 60,80,90,100,120,140 };
+	int post[] = { 60,90,80,140,120,100 };
 
-	int pre[] = { 1, 2, 4, 5, 3, 6, 7 };
-	int in[] = { 4, 2, 5, 1, 6, 3, 7 };
-	int post[] = { 4, 5, 2, 6, 7, 3, 1 };
+	//1.create tree by pre and in
+	createTree(PRE_IN, &root0, pre, 0, 5, in, 0, 5);
+	BinaryTree<int> tree0(root0);
+	cout << "1.create tree by pre and in:(pre order result)" << endl;
+	tree0.preOrder(root0);
+	cout << endl;
 
-	//createTree(PRE_IN, &root, pre, 0, 6, in, 0, 6);
-	//createTree(POST_IN, &root, in, 0, 6, post, 0, 6);
+	//2.create tree by in and post
+	createTree(POST_IN, &root1, in, 0, 5, post, 0, 5);
+	BinaryTree<int> tree1(root1);
+	cout << "2.create tree by in and post:(pre order result)" << endl;
+	tree1.preOrder(root1);
+	cout << endl;
 
-	int pre1[] = {1, 2, 5, 3, 4, 6, 7, 8, 9, 10};
-	int in1[] = {5, 2, 3, 4, 1, 6, 8, 9, 7, 10};
-	createTree(PRE_IN, &root, pre1, 0, 9, in1, 0, 9);
+	//3.insert node
+	insertNode(&root0, 110);
+	cout << "3.insert node 110:" << endl;
+	tree0.preOrder(root0);
+	cout << endl;
 
-	BinaryTree<int> tree(root);
-	tree.postOrder(root);
+	//4.search node
+	cout << "4.search node 120 and 70:" << endl;
+	BinaryTreeNode<int>* test0 = NULL;
+	BinaryTreeNode<int>* test1 = NULL;
+	test0 = search(root0, 120);
+	test1 = search(root0, 70);
+	if (test0) {
+		cout << test0->element << endl;
+	}else{
+		cout << "120 not found" << endl;
+	}
+	if (test1)
+	{
+		cout << test1->element << endl;
+	}else{
+		cout << "70 not found" << endl;
+	}
+	cout << endl;
+
+	//5.delete node
+	deleteByCopying(root0, 80);
+	cout << "5.delete node 80:" << endl;
+	tree0.preOrder(root0);
+	cout << endl;
+
 }
