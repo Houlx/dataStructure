@@ -349,18 +349,162 @@ void createTree(createTreeMethod method, BinaryTreeNode<T>** root, T arr1[], int
 }
 
 template <class T>
-int degreeIs1(BinaryTreeNode<T>* root){
-	int i=0;
-	if (NULL!=root)
+int degreeIs1(BinaryTreeNode<T>* root) {
+	int i = 0;
+	if (NULL != root)
 	{
-		if ((NULL!=root->LChild && NULL==root->RChild) || (NULL!=root->RChild && NULL == root->LChild))
+		if ((NULL != root->LChild && NULL == root->RChild) || (NULL != root->RChild && NULL == root->LChild))
 		{
-			i=1+degreeIs1(root->LChild)+degreeIs1(root->RChild);
-		}else{
-			i=degreeIs1(root->LChild)+degreeIs1(root->RChild);
+			i = 1 + degreeIs1(root->LChild) + degreeIs1(root->RChild);
+		}
+		else {
+			i = degreeIs1(root->LChild) + degreeIs1(root->RChild);
 		}
 	}
 	return i;
+}
+
+template <class T>
+int degreeIs2(BinaryTreeNode<T>* root) {
+	int i = 0;
+	if (root)
+	{
+		if ((NULL != root->LChild) && (NULL != root->RChild))
+		{
+			i = 1 + degreeIs2(root->LChild) + degreeIs2(root->RChild);
+		}
+		else {
+			i = degreeIs2(root->LChild) + degreeIs2(root->RChild);
+		}
+	}
+	return i;
+}
+
+template <class T>
+int leafNode(BinaryTreeNode<T>* root) {
+	int i = 0;
+	if (root)
+	{
+		if (NULL == root->LChild && NULL == root->RChild)
+		{
+			i = 1;
+		}
+		else {
+			i = leafNode(root->LChild) + leafNode(root->RChild);
+		}
+	}
+	return i;
+}
+
+template <class T>
+int height(BinaryTreeNode<T>* root) {
+	if (!root)
+	{
+		return 0;
+	}
+	else {
+		return height(root->LChild) > height(root->RChild) ? height(root->LChild) + 1 : height(root->RChild) + 1;
+	}
+}
+
+// int count[20];
+// int max = -1;
+// template <class T>
+// void width(BinaryTreeNode<T>* root, int k) {
+// 	if (!root)
+// 	{
+// 		return;
+// 	}
+// 	count[k]++;
+// 	if (max < count[k])
+// 	{
+// 		max = count[k];
+// 	}
+// 	width(root->LChild, k + 1);
+// 	width(root->RChild, k + 1);
+// }
+
+
+template <class T>
+void nodeInOneDepth(BinaryTreeNode<T>* node, int depth, int curDepth, int* pnums) {
+	if (!node || curDepth > depth) {
+		return;
+	}
+	else if (curDepth < depth) {
+		nodeInOneDepth(node->LChild, depth, curDepth + 1, pnums);
+		nodeInOneDepth(node->RChild, depth, curDepth + 1, pnums);
+	}
+	else {
+		(*pnums)++;
+	}
+}
+template <class T>
+int width(BinaryTreeNode<T>* root) {
+	int h = height(root);
+	int w = 0, maxWidth = 0, depth = 1;
+
+	for (int i = 1; i <= h; i++) {
+		w = 0;
+		nodeInOneDepth(root, i, 1, &w);
+		if (w > maxWidth)
+		{
+			maxWidth = w;
+			depth = i;
+		}
+	}
+	return maxWidth;
+}
+
+template <class T>
+int findMaxValue(BinaryTreeNode<T>* root) {
+	static int maxValue = 0;
+	if (root)
+	{
+		if (root->getValue() > maxValue)
+		{
+			maxValue = root->getValue();
+		}
+		findMaxValue(root->LChild);
+		findMaxValue(root->RChild);
+	}
+	return maxValue;
+}
+
+template <class T>
+void revert(BinaryTreeNode<T>* root) {
+	BinaryTreeNode<T> *temp;
+	if (root)
+	{
+		temp = root->LChild;
+		root->LChild = root->RChild;
+		root->RChild = temp;
+		revert(root->LChild);
+		revert(root->RChild);
+	}
+}
+
+template <class T>
+void deleteLeaf(BinaryTreeNode<T>* root) {
+	if (root) {
+		if (root->LChild) {
+			if (root->LChild->LChild || root->LChild->RChild) {
+				deleteLeaf(root->LChild);
+			} else {
+				delete root->LChild;
+				root->LChild = NULL;
+			}
+		}
+		if (root->RChild)
+		{
+			if (root->RChild->LChild || root->RChild->RChild)
+			{
+				deleteLeaf(root->RChild);
+			} else {
+				delete root->RChild;
+				root->RChild = NULL;
+			}
+		}
+	}
 }
 
 int main(int argc, char const *argv[])
@@ -400,13 +544,15 @@ int main(int argc, char const *argv[])
 	test1 = search(root0, 70);
 	if (test0) {
 		cout << test0->element << endl;
-	} else {
+	}
+	else {
 		cout << "120 not found" << endl;
 	}
 	if (test1)
 	{
 		cout << test1->element << endl;
-	} else {
+	}
+	else {
 		cout << "70 not found" << endl;
 	}
 	cout << endl;
@@ -420,20 +566,45 @@ int main(int argc, char const *argv[])
 	//141页第五题（1）统计度为1的结点个数
 	cout << "统计度为1的结点个数" << endl;
 	cout << degreeIs1(root1) << endl;
+	cout << endl;
 
 	//（2）统计度为2的结点个数
+	cout << "统计度为2的结点个数" << endl;
+	cout << degreeIs2(root1) << endl;
+	cout << endl;
 
 	//（3）统计叶节点（度为0）的节点个数
+	cout << "统计度为0的结点（叶节点）个数" << endl;
+	cout << leafNode(root1) << endl;
+	cout << endl;
 
 	//（4）统计二叉树的高度
+	cout << "统计二叉树的高度" << endl;
+	cout << height(root1) << endl;
+	cout << endl;
 
 	//（5）统计二叉树的宽度，即在二叉树的各层上具有结点数最多的那一层上的结点总数
+	cout << "统计宽度" << endl;
+	cout << width(root1) << endl;
+	cout << endl;
 
 	//（6）计算二叉树中各结点中的最大元素的值
+	cout << "结点中最大元素的值" << endl;
+	cout << findMaxValue(root1) << endl;
+	cout << endl;
 
 	//（7）交换每个结点的左孩子结点和右孩子结点
+	cout << "交换左右子结点" << endl;
+	revert(root1);
+	tree1.preOrder(root1);
+	cout << endl;
+
 
 	//（8）从二叉树中删除所有叶子结点
+	cout << "删除所有叶子结点" << endl;
+	deleteLeaf(root1);
+	tree1.preOrder(root1);
+	cout << endl;
 
 	//141页第六题：编写算法判定给定二叉树是否为完全二叉树
 
