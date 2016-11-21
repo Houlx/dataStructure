@@ -507,6 +507,32 @@ void deleteLeaf(BinaryTreeNode<T>* root) {
 	}
 }
 
+template <class T>
+bool isCompletedTree(BinaryTreeNode<T>* root) {
+	queue<BinaryTreeNode<T>*> q;
+
+	if (root)
+	{
+		q.push(root);
+		BinaryTreeNode<T>* cur = NULL;
+		bool flag = false;
+		while (!q.empty()) {
+			cur = q.front();
+			q.pop();
+			if (cur) {
+				if (flag) {
+					return false;
+				}
+				q.push(cur->LChild);
+				q.push(cur->RChild);
+			} else {
+				flag = true;
+			}
+		}
+		return true;
+	}
+	return true;
+}
 int main(int argc, char const *argv[])
 {
 	//test Function.
@@ -607,5 +633,7 @@ int main(int argc, char const *argv[])
 	cout << endl;
 
 	//141页第六题：编写算法判定给定二叉树是否为完全二叉树
-
+	cout << "判断是否是完全二叉树" << endl;
+	cout << isCompletedTree(root1) << endl;
+	cout << endl;
 }
