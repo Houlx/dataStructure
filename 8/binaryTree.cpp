@@ -219,14 +219,14 @@ public:
 	// void deleteBinaryTree(BinaryTreeNode<T>* root);
 
 
-	
+
 };
 //二叉搜索树 查找
 template <class T>
 BinaryTreeNode<T>* search(BinaryTreeNode<T>* root, T key) {
 	bool find = false;
 	BinaryTreeNode<T>* temp = root;
-	while (temp!=NULL && !find) {
+	while (temp != NULL && !find) {
 		if (key == temp->element) {
 			find = true;
 			return temp;
@@ -248,7 +248,7 @@ void insertNode(BinaryTreeNode<T>** root, const T& value) {
 	if ((*root) == NULL) {
 		(*root) = p;
 	}
-	else if (value<(*root)->getValue()) {
+	else if (value < (*root)->getValue()) {
 		insertNode(&((*root)->LChild), value);
 	}
 	else {
@@ -298,7 +298,7 @@ template <class T>
 void createTree(createTreeMethod method, BinaryTreeNode<T>** root, T arr1[], int i, int j, T arr2[], int k, int h) {
 	int m, n;
 	switch (method) {
-		//先序，中序 构造二叉树
+	//先序，中序 构造二叉树
 	case PRE_IN:
 		(*root) = new BinaryTreeNode<T>();
 		(*root)->element = arr1[i];
@@ -321,7 +321,7 @@ void createTree(createTreeMethod method, BinaryTreeNode<T>** root, T arr1[], int
 			createTree(PRE_IN, &(*root)->RChild, arr1, i + m - k + 1, j, arr2, m + 1, h);
 		}
 		break;
-		//后序，中序 构造二叉树
+	//后序，中序 构造二叉树
 	case POST_IN:
 		(*root) = new BinaryTreeNode<T>();
 		(*root)->element = arr2[h];
@@ -348,15 +348,29 @@ void createTree(createTreeMethod method, BinaryTreeNode<T>** root, T arr1[], int
 	}
 }
 
-// void createTree
+template <class T>
+int degreeIs1(BinaryTreeNode<T>* root){
+	int i=0;
+	if (NULL!=root)
+	{
+		if ((NULL!=root->LChild && NULL==root->RChild) || (NULL!=root->RChild && NULL == root->LChild))
+		{
+			i=1+degreeIs1(root->LChild)+degreeIs1(root->RChild);
+		}else{
+			i=degreeIs1(root->LChild)+degreeIs1(root->RChild);
+		}
+	}
+	return i;
+}
+
 int main(int argc, char const *argv[])
 {
 	//test Function.
 	BinaryTreeNode<int>* root0 = NULL;
 	BinaryTreeNode<int>* root1 = NULL;
-	int pre[] = { 100,80,60,90,120,140 };
-	int in[] = { 60,80,90,100,120,140 };
-	int post[] = { 60,90,80,140,120,100 };
+	int pre[] = { 100, 80, 60, 90, 120, 140 };
+	int in[] = { 60, 80, 90, 100, 120, 140 };
+	int post[] = { 60, 90, 80, 140, 120, 100 };
 
 	//1.create tree by pre and in
 	createTree(PRE_IN, &root0, pre, 0, 5, in, 0, 5);
@@ -386,13 +400,13 @@ int main(int argc, char const *argv[])
 	test1 = search(root0, 70);
 	if (test0) {
 		cout << test0->element << endl;
-	}else{
+	} else {
 		cout << "120 not found" << endl;
 	}
 	if (test1)
 	{
 		cout << test1->element << endl;
-	}else{
+	} else {
 		cout << "70 not found" << endl;
 	}
 	cout << endl;
@@ -402,5 +416,25 @@ int main(int argc, char const *argv[])
 	cout << "5.delete node 80:" << endl;
 	tree0.preOrder(root0);
 	cout << endl;
+
+	//141页第五题（1）统计度为1的结点个数
+	cout << "统计度为1的结点个数" << endl;
+	cout << degreeIs1(root1) << endl;
+
+	//（2）统计度为2的结点个数
+
+	//（3）统计叶节点（度为0）的节点个数
+
+	//（4）统计二叉树的高度
+
+	//（5）统计二叉树的宽度，即在二叉树的各层上具有结点数最多的那一层上的结点总数
+
+	//（6）计算二叉树中各结点中的最大元素的值
+
+	//（7）交换每个结点的左孩子结点和右孩子结点
+
+	//（8）从二叉树中删除所有叶子结点
+
+	//141页第六题：编写算法判定给定二叉树是否为完全二叉树
 
 }
