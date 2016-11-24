@@ -138,7 +138,7 @@ void convert(int n,int operand){
 	cout<<endl;
 }
 int main(int argc, char const *argv[]){
-	convert(2,1023);
+	convert(2,3636);
 	convert(8,789);
 	convert(16,15213);
 	return 0;
