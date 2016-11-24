@@ -407,24 +407,6 @@ int height(BinaryTreeNode<T>* root) {
 	}
 }
 
-// int count[20];
-// int max = -1;
-// template <class T>
-// void width(BinaryTreeNode<T>* root, int k) {
-// 	if (!root)
-// 	{
-// 		return;
-// 	}
-// 	count[k]++;
-// 	if (max < count[k])
-// 	{
-// 		max = count[k];
-// 	}
-// 	width(root->LChild, k + 1);
-// 	width(root->RChild, k + 1);
-// }
-
-
 template <class T>
 void nodeInOneDepth(BinaryTreeNode<T>* node, int depth, int curDepth, int* pnums) {
 	if (!node || curDepth > depth) {
