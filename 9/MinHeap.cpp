@@ -32,11 +32,11 @@ public:
 	bool remove(int, T&);
 	void siftUp(int);
 	void siftDown(int);
-	void moveMax();
+	void moveMin();
 
 	bool insert(const T&);
 
-	T& removeMax();
+	T& removeMin();
 };
 
 template <class T>
@@ -70,11 +70,20 @@ void MinHeap<T>::siftDown(int left) {
 }
 
 template <class T>
-bool MinHeap<T>::insert(const T&) {
-	if (currentSize <= maxSize) {
-		heapArray[currentSize] = T;
-		currentSize++;
-
+T& MinHeap<T>::removeMin() {
+	T temp = 0;
+	if (currentSize == 0) {
+		cout << "cannot delete" << endl;
+		return temp;
+	}
+	else {
+		temp = heapArray[0];
+		heapArray[0] = heapArray[currentSize - 1];
+		currentSize--;
+		if (currentSize > 1) {
+			siftDown(0);
+		}
+		return temp;
 	}
 }
 
@@ -83,6 +92,9 @@ int main(int argc, char const *argv[])
 	int arr[] = { 20, 12, 35, 15, 10, 80, 30 };
 	MinHeap<int> heap(arr, 7, 20);
 	heap.initHeap();
+	heap.print();
+	cout << endl;
+	heap.removeMin();
 	heap.print();
 	return 0;
 }
