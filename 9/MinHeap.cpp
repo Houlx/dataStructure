@@ -47,6 +47,33 @@ void MinHeap<T>::initHeap() {
 }
 
 template <class T>
+void MinHeap<T>::siftUp(int position) {
+	int child = position;
+	int parent = (child - 1) / 2;
+
+	T temp = heapArray[position];
+
+	while (parent >= 0 && child >= 1) {
+		if (heapArray[parent] > temp) {
+			heapArray[child] = heapArray[parent];
+			child = parent;
+			parent = (child - 1) / 2;
+		} else {
+			break;
+		}
+	}
+	heapArray[child] = temp;
+}
+
+template <class T>
+bool MinHeap<T>::insert(const T& item) {
+	if (currentSize < maxSize) {
+		heapArray[currentSize] = item;
+		currentSize++;
+	}
+	siftUp(currentSize - 1);
+}
+template <class T>
 void MinHeap<T>::siftDown(int left) {
 	int i = left;
 	int j = 2 * i + 1;
@@ -95,6 +122,9 @@ int main(int argc, char const *argv[])
 	heap.print();
 	cout << endl;
 	heap.removeMin();
+	heap.print();
+	cout << endl;
+	heap.insert(3);
 	heap.print();
 	return 0;
 }
