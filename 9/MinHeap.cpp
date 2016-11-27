@@ -26,13 +26,38 @@ public:
 		}
 	}
 
-	bool isLeaf(int) const;
-	int LChild(int) const;
-	int RChild(int) const;
-	bool remove(int, T&);
+	bool isLeaf(int position) const {
+		if (!heapArray[2 * position + 1] && !heapArray[2 * position + 2]) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	int LChild(int position) const {
+		if (heapArray[2 * position + 1]) {
+			return 2 * position + 1;
+		} else {
+			return -1;
+		}
+	}
+	int RChild(int position) const {
+		if (heapArray[2 * position + 2]) {
+			return 2 * position + 2;
+		} else {
+			return -1;
+		}
+	}
+	bool remove(int position, T& item) {
+		item = heapArray[position];
+		heapArray[position] = heapArray[currentSize - 1];
+		currentSize--;
+		if (currentSize > 1) {
+			siftDown(0);
+		}
+	}
 	void siftUp(int);
 	void siftDown(int);
-	void moveMin();
+	// void moveMin();
 
 	bool insert(const T&);
 
@@ -125,6 +150,10 @@ int main(int argc, char const *argv[])
 	heap.print();
 	cout << endl;
 	heap.insert(3);
+	heap.print();
+	cout<<endl;
+	int temp;
+	heap.remove(2,temp);
 	heap.print();
 	return 0;
 }
