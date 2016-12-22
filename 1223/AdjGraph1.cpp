@@ -6,102 +6,6 @@
 #include "Graph1.h"
 using namespace std;
 
-template <class T>
-class MinHeap {
-private:
-	T* heapArray;
-	int currentSize;
-	int maxSize;
-public:
-	MinHeap(int size, int max = 100) {
-		heapArray = new T[max];
-		currentSize = 0;
-		maxSize = max;
-	}
-
-	int getCurrentSize(){
-		return currentSize;
-	}
-	bool isEmpty() {
-		return currentSize == 0;
-	}
-
-	void initHeap() {
-		for (int i = currentSize / 2 - 1; i >= 0; i--) {
-			siftDown(i);
-		}
-	}
-
-	void visit(){
-		for(int i=0;i<currentSize;i++)
-			cout<<heapArray[i]<<" ";
-	}
-
-	void siftUp(int position) {
-		int child = position;
-		int parent = (child - 1) / 2;
-		T temp = heapArray[position];
-		while (parent >= 0 && child >= 1) {
-			if (heapArray[parent] > temp) {
-				heapArray[child] = heapArray[parent];
-				child = parent;
-				parent = (child - 1) / 2;
-			}
-			else {
-				break;
-			}
-		}
-		heapArray[child] = temp;
-	}
-
-	bool insert(const T& item) {
-		if (currentSize < maxSize) {
-			heapArray[currentSize] = item;
-			currentSize++;
-		}
-		siftUp(currentSize - 1);
-		return true;
-	}
-
-	void siftDown(int left) {
-		int i = left;
-		int j = 2 * i + 1;
-		T temp = heapArray[i];
-
-		while (j < currentSize) {
-			if ((j<currentSize - 1) && (heapArray[j]>heapArray[j + 1])) {
-				j++;
-			}if (temp>heapArray[j]) {
-				heapArray[i] = heapArray[j];
-				i = j;
-				j = 2 * j + 1;
-			}
-			else {
-				break;
-			}
-		}
-		heapArray[i] = temp;
-	}
-
-	T& removeMin() {
-		T temp;
-		if (currentSize == 0) {
-			cout << "cannot delete" << endl;
-			return temp;
-		}
-		else {
-			temp = heapArray[0];
-			heapArray[0] = heapArray[currentSize - 1];
-			currentSize--;
-			if (currentSize > 1) {
-				siftDown(0);
-			}
-			return temp;
-		}
-	}
-};
-
-
 class AdjGraph :public Graph {
 public:
 	int** matrix;
@@ -237,6 +141,70 @@ public:
 
 };
 
+void Dijkstra(Graph &G, int s, int D[], int path[]) {
+	int n = G.getVertexNum();
+	int i, j;
+	for (i = 0; i < n; i++) {
+		G.markVisited[i] = UNVISITED;
+		D[i] = 32767;
+		path[i] = -1;
+	}
+	G.markVisited[s] = VISITED;
+	D[s] = 0;
+	path[s] = s;
+
+	for (i = 0; i < n; i++) {
+		int min = D[0];
+		int k = 0;
+		for (j = 1; j < n; j++) {
+			if (G.markVisited[j] == UNVISITED && min > D[j]) {
+				min = D[j];
+				k = j;
+			}
+		}
+		G.markVisited[k] = VISITED;
+		for (Edge e = G.getFirstEdge(k); G.isEdge(e); e = G.getNextEdge(e)) {
+			int endVertex = e.end;
+			if (G.markVisited[endVertex] == UNVISITED && (D[endVertex] > (D[k] + e.weight))) {
+				D[endVertex] = D[k] + e.weight;
+				path[endVertex] = k;
+			}
+		}
+	}
+}
+
+void Floyd(Graph &G, int* adj[], int* path[]) {
+	int i, j, v;
+	int n = G.getVertexNum();
+	for (i = 0; i < n; i++) {
+		for (j = 0; j < n; j++) {
+			if (i == j) {
+				adj[i][j] = 0;
+				path[i][j] = i;
+			}
+			else {
+				adj[i][j] = 32767;
+				path[i][j] = -1;
+			}
+		}
+	}
+	for (v = 0; v < n; v++) {
+		for (Edge e = G.getFirstEdge(v); G.isEdge(e); e = G.getNextEdge(e)) {
+			adj[v][e.end] = G.getWeight(e);
+		}
+	}
+	for (v = 0; v < n; v++) {
+		for (i = 0; i < n; i++) {
+			for (j = 0; j < n; j++) {
+				if (adj[i][j] > (adj[i][v] + adj[v][j])) {
+					adj[i][j] = adj[i][v] + adj[v][j];
+					path[i][j] = v;
+				}
+			}
+		}
+	}
+}
+
 int main() {
 	AdjGraph graph(6);
 	graph.setEdge(1, 2, 6);
@@ -262,8 +230,33 @@ int main() {
 	graph.print();
 	cout << endl;
 
-	graph.DFS();
-	cout << endl;
-	graph.BFS();
-	cout<<endl;	
+	int D[10] = { 0 };
+	int path[10] = { 0 };
+	Dijkstra(graph, 0, D, path);
+	for (int i = 0; i < 10; i++) {
+		cout << D[i] << " ";
+	}
+	cout << endl << endl;
+
+
+	int** adj = (int**)new int*[6];
+	int** pathFloyd = (int**)new int*[6];
+	for (int i = 0; i < 6; i++) {
+		adj[i] = new int[6];
+		pathFloyd[i] = new int[6];
+	}
+	for (int i = 0; i < 6; i++) {
+		for (int j = 0; j < 6; j++) {
+			adj[i][j] = 0;
+			pathFloyd[i][j] = 0;
+		}
+	}
+
+	Floyd(graph, adj, pathFloyd);
+	for (int i = 0; i < 6; i++) {
+		for (int j = 0; j < 6; j++) {
+			cout << pathFloyd[i][j] << " ";
+		}
+		cout << endl;
+	}
 }
