@@ -141,7 +141,50 @@ public:
 
 };
 
-void Dijkstra(AdjGraph& G, int s, int* D, int* Path){	for (int i = 0; i < G.getVertexNum(); i++)	{		G.markVisited[i] = 0;		D[i] = 10000;		Path[i] = -1;	}	G.markVisited[s] = VISITED;	D[s] = 0;	Path[s] = s;	int i, j;	for (Edge e = G.getFirstEdge(s); G.isEdge(e); e = G.getNextEdge(e))	{		int endVertex = e.end;		D[endVertex] = e.weight;		Path[endVertex] = s;	}	for (i = 0; i < G.getVertexNum() - 1; i++)	{		int MIN = 10000;		int k = 0;		for (j = 0; j < G.getVertexNum(); j++)		{			if (G.markVisited[j] == 0 && D[j] < MIN)			{				MIN = D[j];				k = j;			}		}		G.markVisited[k] = 1;		for (Edge e = G.getFirstEdge(k); G.isEdge(e); e = G.getNextEdge(e))		{			int endVertex = e.end;			if (G.markVisited[endVertex] == 0 && D[endVertex] > (D[k] + e.weight))			{				D[endVertex] = D[k] + e.weight;				Path[endVertex] = k;			}		}	}}
+void Dijkstra(AdjGraph& G, int s, int* D, int* Path)
+{
+	for (int i = 0; i < G.getVertexNum(); i++)
+	{
+		G.markVisited[i] = 0;
+		D[i] = 10000;
+		Path[i] = -1;
+	}
+
+	G.markVisited[s] = VISITED;
+	D[s] = 0;
+	Path[s] = s;
+	int i, j;
+	for (Edge e = G.getFirstEdge(s); G.isEdge(e); e = G.getNextEdge(e))
+	{
+		int endVertex = e.end;
+		D[endVertex] = e.weight;
+		Path[endVertex] = s;
+	}
+
+	for (i = 0; i < G.getVertexNum() - 1; i++)
+	{
+		int MIN = 10000;
+		int k = 0;
+		for (j = 0; j < G.getVertexNum(); j++)
+		{
+			if (G.markVisited[j] == 0 && D[j] < MIN)
+			{
+				MIN = D[j];
+				k = j;
+			}
+		}
+		G.markVisited[k] = 1;
+		for (Edge e = G.getFirstEdge(k); G.isEdge(e); e = G.getNextEdge(e))
+		{
+			int endVertex = e.end;
+			if (G.markVisited[endVertex] == 0 && D[endVertex] > (D[k] + e.weight))
+			{
+				D[endVertex] = D[k] + e.weight;
+				Path[endVertex] = k;
+			}
+		}
+	}
+}
 
 void Floyd(AdjGraph &G, int* adj[], int* path[]) {
 	int i, j, v;
