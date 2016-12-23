@@ -2,14 +2,14 @@
 using namespace std;
 
 template <class T>
-class MinHeap {
+class MaxHeap {
 private:
 	T* heapArray;
 	int currentSize;
 	int maxSize;
 
 public:
-	MinHeap(T* array, int num, int max) {
+	MaxHeap(T* array, int num, int max) {
 		heapArray = new T[max];
 		for (int i = 0; i < num; i++) {
 			heapArray[i] = array[i];
@@ -61,25 +61,25 @@ public:
 
 	bool insert(const T&);
 
-	T& removeMin();
+	T& removeMax();
 };
 
 template <class T>
-void MinHeap<T>::initHeap() {
+void MaxHeap<T>::initHeap() {
 	for (int i = currentSize / 2 - 1; i >= 0; i--) {
 		siftDown(i);
 	}
 }
 
 template <class T>
-void MinHeap<T>::siftUp(int position) {
+void MaxHeap<T>::siftUp(int position) {
 	int child = position;
 	int parent = (child - 1) / 2;
 
 	T temp = heapArray[position];
 
 	while (parent >= 0 && child >= 1) {
-		if (heapArray[parent] > temp) {
+		if (heapArray[parent] < temp) {
 			heapArray[child] = heapArray[parent];
 			child = parent;
 			parent = (child - 1) / 2;
@@ -91,7 +91,7 @@ void MinHeap<T>::siftUp(int position) {
 }
 
 template <class T>
-bool MinHeap<T>::insert(const T& item) {
+bool MaxHeap<T>::insert(const T& item) {
 	if (currentSize < maxSize) {
 		heapArray[currentSize] = item;
 		currentSize++;
@@ -99,16 +99,16 @@ bool MinHeap<T>::insert(const T& item) {
 	siftUp(currentSize - 1);
 }
 template <class T>
-void MinHeap<T>::siftDown(int left) {
+void MaxHeap<T>::siftDown(int left) {
 	int i = left;
 	int j = 2 * i + 1;
 	T temp = heapArray[i];
 
 	while (j < currentSize) {
-		if ((j < currentSize - 1) && (heapArray[j] > heapArray[j + 1])) {
+		if ((j < currentSize - 1) && (heapArray[j] < heapArray[j + 1])) {
 			j++;
 		}
-		if (temp > heapArray[j])
+		if (temp < heapArray[j])
 		{
 			heapArray[i] = heapArray[j];
 			i = j;
@@ -122,7 +122,7 @@ void MinHeap<T>::siftDown(int left) {
 }
 
 template <class T>
-T& MinHeap<T>::removeMin() {
+T& MaxHeap<T>::removeMax() {
 	T temp = 0;
 	if (currentSize == 0) {
 		cout << "cannot delete" << endl;
@@ -142,11 +142,11 @@ T& MinHeap<T>::removeMin() {
 int main(int argc, char const *argv[])
 {
 	int arr[] = { 20, 12, 35, 15, 10, 80, 30 };
-	MinHeap<int> heap(arr, 7, 20);
+	MaxHeap<int> heap(arr, 7, 20);
 	heap.initHeap();
 	heap.print();
 	cout << endl;
-	heap.removeMin();
+	heap.removeMax();
 	heap.print();
 	cout << endl;
 	heap.insert(3);
