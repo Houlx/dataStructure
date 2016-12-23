@@ -141,39 +141,9 @@ public:
 
 };
 
-void Dijkstra(Graph &G, int s, int D[], int path[]) {
-	int n = G.getVertexNum();
-	int i, j;
-	for (i = 0; i < n; i++) {
-		G.markVisited[i] = UNVISITED;
-		D[i] = 32767;
-		path[i] = -1;
-	}
-	G.markVisited[s] = VISITED;
-	D[s] = 0;
-	path[s] = s;
+void Dijkstra(AdjGraph& G, int s, int* D, int* Path){	for (int i = 0; i < G.getVertexNum(); i++)	{		G.markVisited[i] = 0;		D[i] = 10000;		Path[i] = -1;	}	G.markVisited[s] = VISITED;	D[s] = 0;	Path[s] = s;	int i, j;	for (Edge e = G.getFirstEdge(s); G.isEdge(e); e = G.getNextEdge(e))	{		int endVertex = e.end;		D[endVertex] = e.weight;		Path[endVertex] = s;	}	for (i = 0; i < G.getVertexNum() - 1; i++)	{		int MIN = 10000;		int k = 0;		for (j = 0; j < G.getVertexNum(); j++)		{			if (G.markVisited[j] == 0 && D[j] < MIN)			{				MIN = D[j];				k = j;			}		}		G.markVisited[k] = 1;		for (Edge e = G.getFirstEdge(k); G.isEdge(e); e = G.getNextEdge(e))		{			int endVertex = e.end;			if (G.markVisited[endVertex] == 0 && D[endVertex] > (D[k] + e.weight))			{				D[endVertex] = D[k] + e.weight;				Path[endVertex] = k;			}		}	}}
 
-	for (i = 0; i < n; i++) {
-		int min = D[0];
-		int k = 0;
-		for (j = 1; j < n; j++) {
-			if (G.markVisited[j] == UNVISITED && min > D[j]) {
-				min = D[j];
-				k = j;
-			}
-		}
-		G.markVisited[k] = VISITED;
-		for (Edge e = G.getFirstEdge(k); G.isEdge(e); e = G.getNextEdge(e)) {
-			int endVertex = e.end;
-			if (G.markVisited[endVertex] == UNVISITED && (D[endVertex] > (D[k] + e.weight))) {
-				D[endVertex] = D[k] + e.weight;
-				path[endVertex] = k;
-			}
-		}
-	}
-}
-
-void Floyd(Graph &G, int* adj[], int* path[]) {
+void Floyd(AdjGraph &G, int* adj[], int* path[]) {
 	int i, j, v;
 	int n = G.getVertexNum();
 	for (i = 0; i < n; i++) {
@@ -183,7 +153,7 @@ void Floyd(Graph &G, int* adj[], int* path[]) {
 				path[i][j] = i;
 			}
 			else {
-				adj[i][j] = 32767;
+				adj[i][j] = 1000;
 				path[i][j] = -1;
 			}
 		}
@@ -233,7 +203,7 @@ int main() {
 	int D[10] = { 0 };
 	int path[10] = { 0 };
 	Dijkstra(graph, 0, D, path);
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < graph.getVertexNum(); i++) {
 		cout << D[i] << " ";
 	}
 	cout << endl << endl;
@@ -255,7 +225,7 @@ int main() {
 	Floyd(graph, adj, pathFloyd);
 	for (int i = 0; i < 6; i++) {
 		for (int j = 0; j < 6; j++) {
-			cout << pathFloyd[i][j] << " ";
+			cout << adj[i][j] << " ";
 		}
 		cout << endl;
 	}
