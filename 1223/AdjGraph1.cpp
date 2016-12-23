@@ -218,6 +218,69 @@ void Floyd(AdjGraph &G, int* adj[], int* path[]) {
 	}
 }
 
+void DFS(AdjGraph& G,int v)
+{
+	cout << v << " ";
+	G.markVisited[v] = VISITED;
+	for (Edge e = G.getFirstEdge(v); G.isEdge(e); e = G.getNextEdge(e))
+	{
+		if (G.markVisited[e.end] == 0)
+		{
+			DFS(G,e.end);
+		}
+	}
+}
+bool TopologySort(AdjGraph& G, int* sortArray) {
+	int n = G.getVertexNum();
+	int* inDegree = new int[n];
+	int v;
+	Edge e;
+
+	//all set 0 and unvisited
+	for (v = 0; v < n; v++) {
+		inDegree[v] = 0;
+		G.markVisited[v] = UNVISITED;
+	}
+
+	//count all node's indegree
+	for (v = 0; v < n; v++) {
+		for (e = G.getFirstEdge(v); G.isEdge(e); e = G.getNextEdge(e)) {
+			inDegree[e.end]++;
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		//find position that doesn't have indegree
+		for (v = 0; v < n; v++) {
+			if (inDegree[v] == 0 && G.markVisited[v] == UNVISITED) {
+				break;
+			}
+		}
+		//now v is the node that has no indegree
+		//if all nodes have indegree it suggests failed
+		if (v == n) {
+			cout << "has round" << endl;
+			int m;
+			for (m = 0; m < n; m++) {
+				if (inDegree[m] != 0 && G.markVisited[m] == UNVISITED) {
+					break;
+				}
+			}
+			DFS(G, m);
+			return false;
+		}
+		//put into topo aray and mark visited
+		G.markVisited[v] = VISITED;
+		sortArray[i] = v;
+		//delete v's outdegree(other nodes' indegree with it)
+		for (e = G.getFirstEdge(v); G.isEdge(e); e = G.getNextEdge(e)) {
+			inDegree[e.end]--;
+		}
+	}
+	delete[] inDegree;
+	return true;
+}
+
 int main() {
 	AdjGraph graph(6);
 	graph.setEdge(1, 2, 6);
@@ -272,4 +335,15 @@ int main() {
 		}
 		cout << endl;
 	}
+	cout << endl << endl;
+
+	AdjGraph topo(4);
+	topo.setEdge(1, 2, 1);
+	topo.setEdge(1, 3, 1);
+	topo.setEdge(4, 3, 1);
+	topo.setEdge(2, 4, 1);
+	topo.setEdge(3, 2, 1);
+
+	int sortArray[4] = { 0 };
+	TopologySort(topo, sortArray);
 }
